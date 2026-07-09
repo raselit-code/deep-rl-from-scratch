@@ -1,6 +1,6 @@
-# Q learning 
-### My Understanding
-#### ε (epsilon) Greedy: 
+# ε (epsilon) Greedy: 
+
+
     For every action decision
 
     With probability ε, choose a random action (exploration).
@@ -63,7 +63,7 @@ Probability: "Each action has an 80% chance of exploration." ✅
 
 Guarantee: "Exactly 80 out of 100 actions will be exploration." ❌
 
-#### Why Bellman Equation needed ?
+# Why Bellman Equation needed ?
 To calculate Each value of a state or state-action pair , we need to sum all the rewards an agent can get if it starts at that state. 
 
 this is Computationaly Expensive. 
@@ -109,7 +109,7 @@ Now calculate:
 
 ✅ The next episode starts with this updated Q-table, so learning continues from where the previous episode left off. 
 
-Bellman Equations: 
+# Different forms of Bellman Equations: 
 
 $$V(s) = R + \gamma V(s')$$
 
@@ -117,10 +117,110 @@ $$V(s) = R + \gamma \sum P(s' | s, a)V(s')$$
 
 $$Q(s,a) = R + \gamma \max_{a'} Q(s',a')$$
 
-Q-learning Update Equation:
 
-$$Q(s,a) \leftarrow Q(s,a) + \alpha [R + \gamma \max_{a'} Q(s',a') - Q(s,a)]$$
 
+- $$V(s) = R + \gamma V(s')$$ This assumes that after taking an action, there is only ONE next state.
+
+Home -----> Shop -----> Treasure 
+
+- Problem:
+
+Real environments are rarely this simple.
+
+Suppose now From Home, taking the same action can lead to
+
+Shop (80%)
+
+Park (20%)
+
+Should we use
+
+    V(Home)=R+γV(Shop) 
+
+    or 
+
+    V(Home)=R+γV(Park)
+
+Neither!
+
+Both can happen.
+
+So we compute the expected (average) value.
+
+That's why the equation becomes 
+$$V(s) = R + \gamma \sum P(s' | s, a)V(s')$$
+
+- But another problem appears
+
+Even if you know
+
+      V(Home)=50
+      
+you still don't know
+
+which action to take.
+
+Suppose
+
+At Home
+
+Action 1 → Walk
+
+Action 2 → Bike
+
+Action 3 → Stay
+
+The value function only says
+
+Home = 50
+
+It doesn't tell you
+
+Walk?
+
+Bike?
+
+Stay?
+
+It evaluates states, not actions
+
+So RL introduces Q-values
+
+Instead of storing
+
+State
+
+↓
+
+Value
+
+it stores
+
+(State, Action)
+
+↓
+
+Value
+
+Example
+
+| State | Action | Q-value |
+|-------|--------|--------:|
+| Home  | Walk   | 90      |
+| Home  | Bike   | 70      |
+| Home  | Stay   | 30      |
+
+Now the best action is obvious.
+
+Choose
+
+Walk
+
+because
+
+90 is maximum.
+
+This gives $$Q(s,a) = R + \gamma \max_{a'} Q(s',a')$$
 
 
 
