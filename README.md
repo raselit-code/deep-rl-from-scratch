@@ -1,1 +1,1 @@
-# deep-rl-from-scratch
+# deep_rl_from_scratch
