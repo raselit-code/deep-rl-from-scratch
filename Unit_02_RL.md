@@ -186,22 +186,8 @@ It evaluates states, not actions
 
 So RL introduces Q-values
 
-Instead of storing
-
-State
-
-↓
-
-Value
-
-it stores
-
-(State, Action)
-
-↓
-
-Value
-
+Instead of storing State ➡ Value , it stores (State, Action) ➡ Value
+ 
 Example
 
 | State | Action | Q-value |
@@ -212,13 +198,9 @@ Example
 
 Now the best action is obvious.
 
-Choose
+Choose Walk
 
-Walk
-
-because
-
-90 is maximum.
+because 90 is maximum.
 
 This gives $$Q(s,a) = R + \gamma \max_{a'} Q(s',a')$$
 
