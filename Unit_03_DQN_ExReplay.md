@@ -71,9 +71,137 @@ These 3 experiences are given to the neural network for training.
     Neural Network
          ↓
     Update weights 
+    
+### Why is this more efficient? 
 
-  That's the core idea. 
+Suppose the agent experienced: 
 
+    (2, Right, +1, 3)
+
+It is a very useful experience because reaching state 3 gives a reward.
+
+Without replay:
+
+    Experience
+        ↓
+    Learn once
+        ↓
+    Throw away ❌ 
+
+With replay: 
+
+    Experience
+        ↓
+    Store in memory
+        ↓
+    Learn
+        ↓
+    Keep it
+        ↓
+    Maybe sample it again
+        ↓
+    Learn again
+        ↓
+    Maybe sample it again
+        ↓
+    Learn again
+
+So one experience can help train the network multiple times.
+
+### second problem: catastrophic forgetting/interference 
+
+Imagine the agent has learned: 
+
+    State A → Action RIGHT 
+
+So the neural network has learned:
+
+    A → RIGHT is good 
+
+Then the agent moves to another part of the environment and experiences lots of new things:
+
+    B → LEFT
+    C → RIGHT
+    D → LEFT
+    E → LEFT
+    F → RIGHT
+    ... 
+
+If we continuously train only on these new experiences, the neural network's weights keep changing.
+
+Eventually it might become:
+
+A → RIGHT ❌ not as good as before.
+
+The network has partially forgotten what it learned about A.
+
+This is the basic idea of catastrophic forgetting/interference. 
+
+### How does Replay Buffer help?
+
+The buffer keeps both old and new experiences.
+
+For example:
+
+Replay Buffer
+
+    OLD experiences
+    ────────────────
+    A → RIGHT
+    B → LEFT
+    C → RIGHT
+
+    NEW experiences
+    ────────────────
+    D → LEFT
+    E → RIGHT
+    F → LEFT 
+
+Now, instead of training only on: 
+
+    D
+    E
+    F 
+we randomly sample from everything:
+
+    A
+    D
+    C
+    F
+    B 
+
+So the neural network keeps seeing a mixture of:
+
+    OLD + NEW experiences
+
+Therefore it is less likely to completely forget the old ones.
+
+#### What happens when the buffer becomes full?
+
+if Capacity = 5 
+
+Suppose we already have: 
+
+    1
+    2
+    3
+    4
+    5 
+Then a new experience 6 arrives.
+
+The oldest experience is removed:
+
+    Before:
+
+    1  2  3  4  5
+
+    New experience = 6
+
+    After:
+
+    2  3  4  5  6 
+
+So the replay buffer usually works like a fixed-size memory.
 
 
 
